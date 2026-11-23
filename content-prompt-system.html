@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>سیستم پرامپت تولید محتوای سایت | عماد چابک</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+<style>
+:root{
+  --brand:#4b3cc9; --brand-dark:#3a2da6; --tint:#ecebfb; --tint2:#dcd9f7;
+  --green:#12a06a; --mint:#8deac6; --yellow:#ffd84d;
+  --ink:#1e1b3a; --soft:#6b6788; --line:#e3e1f2; --bg:#f3f2fa; --card:#fff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Doran,Vazirmatn,Tahoma,sans-serif;color:var(--ink);line-height:1.85;min-height:100vh;
+  background-color:var(--bg);
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:72px 72px}
+a{color:var(--brand)}
+.top{background:var(--brand);color:#fff;padding:18px 26px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.top h1{font-size:20px;font-weight:900}
+.top h1 span{color:var(--mint)}
+.top .sub{font-size:13px;opacity:.85}
+.top .badge{background:rgba(255,255,255,.16);border-radius:99px;padding:4px 14px;font-size:12.5px}
+.layout{display:grid;grid-template-columns:280px 1fr;min-height:calc(100vh - 76px)}
+aside{background:#fff;border-left:1px solid var(--line);padding:18px 14px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.grp{font-size:12px;font-weight:800;color:var(--soft);margin:14px 6px 6px}
+.tab{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:right;border:none;background:none;font-family:inherit;padding:10px 12px;border-radius:12px;cursor:pointer;color:var(--ink);font-size:14px;transition:background .15s}
+.tab:hover{background:var(--tint)}
+.tab.active{background:var(--brand);color:#fff}
+.tab .code{flex:none;font-size:11.5px;font-weight:800;background:var(--tint2);color:var(--brand-dark);border-radius:7px;padding:1px 8px;margin-top:2px;direction:ltr}
+.tab.active .code{background:var(--mint);color:var(--ink)}
+.tab .tt{font-weight:700;line-height:1.6}
+.tab .new{font-size:10.5px;background:var(--green);color:#fff;border-radius:6px;padding:0 6px;margin-right:4px;font-weight:700}
+main{padding:30px 36px 70px;max-width:960px;width:100%}
+.phead .code{font-size:13px;color:var(--green);font-weight:800;direction:ltr;display:inline-block}
+.phead h2{font-size:25px;font-weight:900;color:var(--ink);margin-bottom:6px}
+.desc{color:var(--soft);font-size:15px;margin-bottom:16px}
+.io{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.io div{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 16px;font-size:14px}
+.io b{display:block;font-size:12.5px;color:var(--brand);margin-bottom:2px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:0 6px 24px rgba(75,60,201,.08);overflow:hidden;margin-bottom:20px}
+.boxbar{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:var(--tint);border-bottom:1px solid var(--line);gap:10px}
+.boxbar .lbl{font-weight:800;font-size:14px;color:var(--brand-dark)}
+.copy{border:none;background:var(--brand);color:#fff;font-family:inherit;font-weight:800;font-size:14px;padding:8px 20px;border-radius:11px;cursor:pointer;transition:background .15s}
+.copy:hover{background:var(--brand-dark)}
+.copy.done{background:var(--green)}
+.ptext{white-space:pre-wrap;padding:22px 24px;font-size:15px;line-height:2.05}
+.hl{color:var(--brand-dark)}
+.ph{background:#fff1c2;color:#6e5200;border-radius:6px;padding:1px 5px}
+.tip{background:#fff;border-right:5px solid var(--yellow);border-radius:12px;padding:12px 16px;font-size:14.5px;margin-bottom:20px}
+.next{display:inline-block;border:2px solid var(--brand);background:#fff;color:var(--brand);font-family:inherit;font-weight:800;font-size:14.5px;padding:9px 20px;border-radius:12px;cursor:pointer}
+.next:hover{background:var(--tint)}
+.guide h3{font-size:18px;font-weight:900;margin:24px 0 10px}
+.guide p{font-size:15px;margin-bottom:10px}
+.guide ol{padding-right:22px;font-size:15px}
+.guide ol li{margin-bottom:8px}
+.flow{display:grid;gap:10px;margin:10px 0 6px}
+.flow .st{display:flex;gap:14px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 16px;cursor:pointer}
+.flow .st:hover{border-color:var(--brand)}
+.flow .n{flex:none;width:46px;height:46px;border-radius:12px;background:var(--green);color:#fff;font-weight:900;display:flex;align-items:center;justify-content:center;direction:ltr;font-size:15px}
+.flow .st b{display:block;font-size:15.5px}
+.flow .st div>span{font-size:13.5px;color:var(--soft)}
+.mark{background:linear-gradient(transparent 55%,var(--yellow) 55%)}
+.cta{background:var(--brand);color:#fff;border-radius:18px;padding:22px 24px;margin-top:28px}
+.cta b{color:var(--mint)}
+.cta a{display:inline-block;margin-top:12px;background:#fff;color:var(--brand);font-weight:800;text-decoration:none;padding:8px 20px;border-radius:11px}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(90px);background:var(--ink);color:#fff;padding:9px 22px;border-radius:99px;font-size:14px;transition:transform .25s;z-index:9}
+.toast.show{transform:translateX(-50%) translateY(0)}
+footer{font-size:12.5px;color:var(--soft);margin-top:30px}
+@media (max-width:820px){
+  .layout{grid-template-columns:1fr}
+  aside{position:sticky;top:0;z-index:5;height:auto;border-left:none;border-bottom:1px solid var(--line);padding:10px 12px}
+  #tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}
+  .grp{display:none}
+  .tab{flex:none;white-space:nowrap;width:auto;padding:8px 12px}
+  main{padding:22px 16px 60px}
+  .io{grid-template-columns:1fr}
+  .ptext{padding:16px;font-size:14.5px}
+  .phead h2{font-size:21px}
+}
+@media print{aside,.copy,.next{display:none}.layout{display:block}body{background:#fff}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div>
+    <h1>سیستم پرامپت <span>تولید محتوای سایت</span></h1>
+    <div class="sub">از آنالیز رقبا تا چک‌لیست انتشار · عماد چابک</div>
+  </div>
+  <span class="badge">برای ChatGPT، Claude و Gemini</span>
+</header>
+
+<div class="layout">
+  <aside><nav id="tabs"></nav></aside>
+  <main id="view"></main>
+</div>
+<div class="toast" id="toast">کپی شد</div>
+
+<!-- ============ GUIDE ============ -->
+<template id="g-guide">
+<div class="guide">
+  <p>این سیستم <span class="mark">هفت پرامپت</span> داره که پشت سر هم اجرا می‌شن. هر پرامپت خروجی مرحله‌ی قبل رو ورودی می‌گیره، برای همین همه‌شون رو باید <b>توی یه چت</b> اجرا کنی.</p>
+  <p>فرقش با پرامپت‌های آماده‌ی اینترنت اینه که AI رو مجبور می‌کنه چیزی از خودش نسازه، قبل از نوشتن از خودت سؤال بپرسه و بعد از نوشتن، متن خودش رو مثل یه ویراستار سخت‌گیر بررسی کنه.</p>
+
+  <h3>مسیر کار</h3>
+  <div class="flow" id="flow"></div>
+
+  <h3>قبل از شروع این‌ها رو بدون</h3>
+  <ol>
+    <li><b>برای هر صفحه یه چت جدید باز کن.</b> اگه چند صفحه رو توی یه چت بنویسی، اطلاعاتشون قاطی می‌شه.</li>
+    <li><b>پروفایل کسب‌وکار رو یه بار پر کن و نگهش دار.</b> برای صفحه‌های بعدی فقط کپی‌ش می‌کنی. اگه از Projects توی ChatGPT و Claude یا Gems توی Gemini استفاده می‌کنی، پروفایل رو توی Instructions بذار تا لازم نباشه هر بار بفرستی.</li>
+    <li><b>جاهای زرد رو با اطلاعات خودت پر کن.</b> بقیه‌ی متن پرامپت رو دست نزن.</li>
+    <li><b>اگه AI نتونست صفحه‌ی رقیب رو باز کنه</b> (توی نسخه‌های رایگان زیاد پیش میاد)، متن صفحه رو کپی کن و براش بفرست. پرامپت‌ها طوری نوشته شدن که به‌جای حدس زدن، بهت بگه.</li>
+    <li><b>قبل از انتشار، همه‌ی جاهایی که AI نوشته [از من بپرس] رو پر کن.</b> اون‌ها دقیقاً همون جاهایی‌ان که محتوای تو رو از بقیه جدا می‌کنن.</li>
+  </ol>
+
+  <h3>از کدوم مرحله شروع کنم؟</h3>
+  <ol>
+    <li>صفحه‌ی جدید می‌خوای بنویسی: از <b>S0</b> تا <b>P6</b> به ترتیب.</li>
+    <li>صفحه‌ی قدیمی رو می‌خوای آپدیت کنی: <b>S0</b>، بعد <b>P1</b> و <b>P2</b> با آدرس صفحه‌ی فعلی. خودشون حالت آپدیت رو تشخیص می‌دن.</li>
+    <li>متن آماده داری و فقط می‌خوای بهترش کنی: <b>S0</b>، بعد <b>P5</b> با متن خودت.</li>
+    <li>صفحه منتشر شده و می‌خوای چکش کنی: <b>P6</b>.</li>
+  </ol>
+
+  <div class="cta">
+    این هفت پرامپت بخش <b>تولید محتوا</b> از یه سیستم بزرگ‌تره. استراتژی، کیورد ریسرچ، کلاسترینگ، تقویم محتوا و تحلیل سرچ کنسول رو توی دوره‌ی جامع سئوی آکادمی دی ام روم قدم‌به‌قدم کار می‌کنیم.
+    <br><a href="https://dmroom.academy/" target="_blank" rel="noopener">آشنایی با دوره‌ها</a>
+  </div>
+</div>
+</template>
+
+<!-- ============ S0 ============ -->
+<template id="p-profile">این پروفایل کسب‌وکار من است. در تمام این چت، هر محتوایی که می‌سازی باید با این اطلاعات هماهنگ باشد.
+
+قوانین این چت:
+۱. هیچ آمار، قیمت، مشخصات فنی، نتیجه یا تجربه‌ای از خودت نساز. هر جا چنین چیزی لازم است، جایش بنویس [از من بپرس: چه چیزی لازم است].
+۲. اگر نتوانستی صفحه‌ای را باز کنی یا فایلی را بخوانی، صریح بگو و حدس نزن.
+۳. اگر می‌توانی کد اجرا کنی، شمارش‌ها (تعداد کلمات، طول Title و Description) را با کد انجام بده. اگر نمی‌توانی، کنار عدد بنویس «تقریبی».
+۴. متن فارسی باشد و اصطلاحات فنی سئو انگلیسی.
+۵. اگر درخواستی با این پروفایل تناقض دارد (محصولی که نمی‌فروشیم، شهری که خدمت نداریم، ادعایی که ممنوع است)، صریح بگو.
+
+فعلاً فقط این کار را بکن: پروفایل را در ۵ خط خلاصه کن، بخش‌های خالی یا مبهم را لیست کن و منتظر دستور بعدی بمان.
+
+پروفایل کسب‌وکار:
+۱. نام برند: [اینجا بنویس]
+۲. آدرس سایت: [اینجا بنویس]
+۳. چه می‌فروشید یا چه خدمتی می‌دهید (دسته‌ها و محصولات یا خدمات اصلی): [اینجا بنویس]
+۴. مشتری اصلی کیست و در چه موقعیتی دنبال شما می‌گردد: [اینجا بنویس]
+۵. شهر یا محدوده‌ی خدمت و ارسال: [اینجا بنویس]
+۶. بازه‌ی قیمت (اقتصادی، متوسط یا لوکس): [اینجا بنویس]
+۷. چرا مشتری از شما می‌خرد و نه از رقیب: [اینجا بنویس]
+۸. سندهای اعتماد (سابقه، نمایندگی رسمی، گارانتی، نظر مشتری، عکس واقعی): [اینجا بنویس]
+۹. چیزهایی که فقط شما می‌دانید (سؤال‌های رایج مشتری، اشتباه‌های رایج خریدارها، نتیجه‌ی تست یا تجربه): [اینجا بنویس]
+۱۰. اسم‌هایی که مشتری برای محصول یا خدمت شما به کار می‌برد، حتی عامیانه: [اینجا بنویس]
+۱۱. رقبای اصلی (اسم و آدرس سایت): [اینجا بنویس]
+۱۲. لحن برند (مثلاً صمیمی، تخصصی یا رسمی): [اینجا بنویس]
+۱۳. ادعاها، موضوع‌ها یا کلمه‌هایی که نباید در محتوا بیاید: [اینجا بنویس]
+۱۴. صفحه‌های مهم سایت برای لینک داخلی (آدرس و موضوع هر صفحه) یا آدرس sitemap: [اینجا بنویس]</template>
+
+<!-- ============ P1 ============ -->
+<template id="p-competitor">می‌خواهم قبل از نوشتن محتوای یک صفحه، صفحه‌های رقبا در صفحه‌ی اول گوگل را آنالیز کنی تا بفهمیم کاربر دقیقاً چه می‌خواهد و ما چه چیزی می‌توانیم بیشتر از رقبا بدهیم.
+
+منبع اطلاعات رقبا:
+۱. اگر متن یا فایل HTML صفحه‌ی رقیب را پیوست کرده‌ام، فقط از همان استفاده کن.
+۲. اگر پیوست نکرده‌ام، صفحه را از روی آدرس باز کن.
+۳. اگر صفحه‌ای باز نشد، بگو کدام‌ها باز نشد و برای آن‌ها چیزی ننویس. من متنشان را برایت می‌فرستم.
+
+برای هر رقیب این‌ها را دربیاور:
+۱. نوع صفحه: مقاله، دسته‌بندی، محصول یا لندینگ خدمات
+۲. قالب محتوا: مثلاً راهنمای قدم‌به‌قدم، لیست، مقایسه، جدول‌محور، پرسش و پاسخ
+۳. زاویه‌ی محتوا: مثلاً چیستی، راهنمای خرید، بهترین‌ها، مقایسه، حل مشکل
+۴. کیوردهای تمرکز: از روی Title، H1 و H2ها
+۵. ساختار: H1، همه‌ی H2ها و H3های مهم
+۶. تعداد کلمات متن اصلی، بدون منو، فوتر و سایدبار
+۷. تعداد عکس، جدول و ویدیو
+۸. Title و Meta Description
+۹. مهم‌ترین نقطه‌ی قوت و مهم‌ترین ضعف، هر کدام در یک جمله
+
+اگر آدرس صفحه‌ی فعلی ما را هم داده‌ام، آن را مثل رقبا بخوان.
+
+بعد برای صفحه‌ی ما جمع‌بندی کن:
+۱. نوع، قالب و زاویه‌ای که بیشتر نتایج صفحه‌ی اول دارند. این نشان می‌دهد گوگل فکر می‌کند کاربر چه می‌خواهد. اگر نتایج با هم فرق دارند، بگو.
+۲. موضوع‌های ضروری: موضوع‌هایی که بیشتر رقبا پوشش داده‌اند.
+۳. جای خالی: سؤال‌هایی که هیچ رقیبی یا فقط یکی جوابشان را داده.
+۴. فرصت Information Gain: چیزی که ما بر اساس پروفایل کسب‌وکار داریم و رقبا ندارند (تجربه، داده، عکس واقعی، نظر متخصص).
+۵. محدوده‌ی طول رقبا، فقط به‌عنوان مرجع. طول هدف نیست؛ هدف این است که صفحه‌ی ما به همه‌ی سؤال‌های ضروری و جای خالی‌ها کامل جواب بدهد.
+۶. رسانه‌ی پیشنهادی: تعداد عکس، جدول یا ویدیو.
+۷. اگر صفحه‌ی فعلی ما را خواندی: صفحه‌ی ما در مقایسه با رقبا چه چیزی کم دارد.
+
+قوانین:
+۱. فقط چیزی را بنویس که در صفحه‌ی رقیب دیدی.
+۲. رقیب را بر اساس اسم و اعتبار برندش قضاوت نکن؛ فقط محتوای صفحه مهم است.
+
+خروجی:
+الف. جدول رقبا: | رقیب | نوع | قالب | زاویه | کیوردهای تمرکز | تعداد کلمات | عکس، جدول، ویدیو | Title | قوت | ضعف |
+ب. ساختار تیترهای هر رقیب، جدا.
+ج. جمع‌بندی برای صفحه‌ی ما.
+
+صفحه‌ی ما:
+[موضوع صفحه، کیورد اصلی، کیوردهای مرتبط و نوع صفحه را اینجا بنویس. اگر صفحه منتشر شده و می‌خواهی آپدیتش کنی، آدرسش را هم بنویس]
+
+آدرس رقبا:
+[۳ تا ۵ آدرس از صفحه‌ی اول گوگل را اینجا بنویس. آگهی‌ها و سایت‌هایی که واقعاً رقیب تو نیستند را کنار بگذار]</template>
+
+<!-- ============ P2 ============ -->
+<template id="p-brief">از روی آنالیز رقبا و پروفایل کسب‌وکار در همین چت، بریف کامل این صفحه را بساز. بریف باید آن‌قدر دقیق باشد که نویسنده، انسان یا AI، بدون سؤال اضافه بتواند صفحه را بنویسد.
+اگر آنالیز رقبا در این چت نیست، کیورد اصلی را جستجو کن و ۳ نتیجه‌ی اول را بخوان. اگر نمی‌توانی جستجو کنی، بگو تا اول آنالیز رقبا را انجام بدهیم.
+
+قدم ۱: شکستن سؤال اصلی (Query Fan-out)
+سؤال اصلی کاربر را به ۸ تا ۱۵ زیرسؤال بشکن؛ همان سؤال‌هایی که کاربر بعد از سؤال اصلی می‌پرسد و ابزارهای AI مثل AI Mode گوگل هم برای ساختن جواب جستجو می‌کنند. از کیوردهای صفحه، موضوع‌های ضروری و جای خالی‌های رقبا استفاده کن.
+برای هر زیرسؤال مشخص کن جوابش کجا می‌آید: H2، H3، FAQ، لینک به صفحه‌ی دیگری از سایت، یا «حذف» اگر Intent دیگری دارد.
+
+قدم ۲: ساختار بر اساس نوع صفحه
+۱. مقاله: H1، مقدمه‌ای که در دو سه جمله‌ی اول جواب مستقیم می‌دهد، فهرست مطالب برای متن بلند، H2 و H3ها، جدول هر جا مقایسه هست، FAQ، دعوت به اقدام به صفحه‌ی فروش مرتبط، معرفی نویسنده.
+۲. دسته‌بندی: یک یا دو پاراگراف کوتاه بالای محصولات، لیست محصولات، لینک به زیردسته‌ها، راهنمای انتخاب پایین صفحه (انواع، سایز، مقایسه)، FAQ، لینک به مقاله‌ی راهنمای مرتبط.
+۳. محصول: نام کامل (نوع، مدل و ویژگی اصلی)، خلاصه‌ی ویژگی‌ها، جدول مشخصات، توضیح کاربرد و تجربه‌ی واقعی، عکس واقعی، نظرات، FAQ، محصولات مرتبط، لینک به راهنمای خرید. کپی کردن توضیحات تولیدکننده یا سایت‌های دیگر ممنوع.
+۴. لندینگ خدمات: H1 با پیشنهاد ارزش، مشکل مشتری، مزیت‌ها، روند کار، اثبات (نمونه‌کار، گارانتی، نظر مشتری)، عوامل مؤثر بر قیمت، FAQ، دعوت به اقدام.
+
+قدم ۳: جزئیات هر بخش
+برای هر H2 و H3 بنویس:
+۱. به کدام زیرسؤال جواب می‌دهد
+۲. جمله‌ی اولش باید چه جوابی بدهد
+۳. چه نکته‌هایی باید بیاید
+۴. کدام کیورد آنجا طبیعی می‌نشیند
+۵. جدول، عکس یا مثال لازم است یا نه
+قاعده‌ها: کیورد اصلی در H1، جمله‌ی اول مقدمه و URL. کیوردهای مرتبط در H2ها و متن، فقط جایی که طبیعی است. هر بخش باید بدون خواندن بقیه‌ی صفحه قابل فهم باشد.
+
+قدم ۴: Entity و Information Gain
+۱. ویژگی‌های اصلی موضوع صفحه را لیست کن (مثلاً برای یک محصول: جنس، ابعاد، کاربرد، نگهداری) و بگو هر کدام کجای صفحه می‌آید.
+۲. هر فرصت Information Gain را به یک بخش مشخص وصل کن و بنویس چه چیزی باید از من گرفته شود (تجربه، عدد، عکس، نمونه).
+
+قدم ۵: لینک داخلی
+۱. صفحه‌های مقصد را فقط از لیست صفحه‌های پروفایل یا sitemap انتخاب کن: صفحه‌ی والد، صفحه‌ی فروش مرتبط (برای مقاله) یا مقاله‌ی راهنما (برای صفحه‌ی فروش)، و ۲ تا ۴ صفحه‌ی هم‌موضوع.
+۲. اگر صفحه‌ی مناسبی در لیست نیست، لینک را پیشنهاد بده و بنویس «صفحه‌ی مقصد را پیدا کن». آدرس نساز.
+۳. Anchor کیورد اصلی صفحه‌ی مقصد یا شکل طبیعی و نزدیکش باشد. یک Anchor به دو صفحه‌ی مختلف لینک نشود.
+
+اگر صفحه از قبل منتشر شده، بریف آپدیت بساز: URL عوض نمی‌شود، برای هر بخش فعلی بنویس «بماند»، «بازنویسی» یا «حذف» و بخش‌های تازه را مشخص کن.
+
+خروجی:
+الف. مشخصات صفحه: کیورد اصلی، کیوردهای مرتبط، نوع صفحه، Intent و URL پیشنهادی
+ب. جدول زیرسؤال‌ها: | زیرسؤال | کجا جواب داده می‌شود |
+ج. ساختار کامل صفحه با جزئیات هر بخش
+د. جدول Entity: | ویژگی | کجای صفحه |
+ه. جدول لینک‌ها: | Anchor | صفحه‌ی مقصد | کدام بخش |
+و. لیست عکس‌ها با Alt پیشنهادی
+ز. لیست چیزهایی که باید از من گرفته شود
+
+صفحه:
+[اگر آنالیز رقبا را در همین چت انجام داده‌ای، این خط را پاک کن. اگر نه، موضوع صفحه، نوع صفحه، کیورد اصلی و کیوردهای مرتبط را اینجا بنویس]</template>
+
+<!-- ============ P3 ============ -->
+<template id="p-interview">قبل از نوشتن، از من مصاحبه کن تا تجربه و داده‌ی واقعی کسب‌وکار وارد متن شود. همین بخش است که محتوای ما را از متن‌های تکراری اینترنت جدا می‌کند.
+
+کار تو:
+۱. از بریف همین چت، همه‌ی جاهایی را پیدا کن که به تجربه، عدد، مثال، عکس یا نظر واقعی نیاز دارند. «چیزهایی که باید از من گرفته شود» و فرصت‌های Information Gain را هم حساب کن.
+۲. از روی آن‌ها ۶ تا ۱۰ سؤال بساز. سؤال‌ها مشخص و قابل جواب باشند، نه کلی.
+سؤال بد: «تجربه‌ات درباره‌ی این محصول چیست؟»
+سؤال خوب: «مشتری‌ها معمولاً موقع انتخاب این محصول چه اشتباهی می‌کنند؟ یک نمونه‌ی واقعی بگو که بعدش پشیمان شده باشند.»
+۳. سؤال‌ها را در گروه‌های ۳ تایی بپرس و بعد از هر گروه منتظر جواب من بمان.
+۴. اگر جوابی کلی یا مبهم بود، فقط یک سؤال تکمیلی بپرس.
+۵. اگر گفتم «نمی‌دانم» یا «رد کن»، برو سراغ سؤال بعدی و آن بخش را با «بدون داده‌ی واقعی» علامت بزن.
+
+بعد از آخرین جواب:
+الف. «یادداشت تجربه» بساز: جواب‌های من را با کلمات خودم، بدون اغراق و بدون اضافه کردن جزئیات، مرتب کن.
+ب. جدول: | یادداشت | کدام بخش صفحه | چطور استفاده شود (مثال، عدد، نقل‌قول، نکته) |
+ج. لیست بخش‌هایی که بدون داده‌ی واقعی ماندند.
+
+قانون مهم: هیچ چیزی به جواب‌های من اضافه نکن. اگر عددی نگفته‌ام، عدد نساز.</template>
+
+<!-- ============ P4 ============ -->
+<template id="p-write">متن کامل صفحه را از روی بریف و یادداشت تجربه‌ی همین چت بنویس.
+
+ساختار و محتوا:
+۱. دقیقاً همان ساختار بریف: همه‌ی تیترها به همان ترتیب، جواب همه‌ی زیرسؤال‌ها، جدول‌ها، FAQ و دعوت به اقدام.
+۲. هر بخش با جواب مستقیم شروع شود و بدون بقیه‌ی صفحه قابل فهم باشد. عبارت‌هایی مثل «همان‌طور که گفتیم» ممنوع.
+۳. یادداشت‌های تجربه را در همان بخش‌هایی بگذار که جدول یادداشت‌ها گفته. معنی‌شان را عوض نکن و جزئیاتی به آن‌ها اضافه نکن.
+۴. کیوردها همان‌جایی که بریف گفته. کیورد اصلی در H1 و جمله‌ی اول مقدمه. هیچ کیوردی به‌زور تکرار نشود.
+۵. لینک‌های داخلی با Anchor بریف، به شکل [Anchor](URL).
+۶. جای هر عکس بنویس: [تصویر: توضیح عکس | Alt: متن Alt]
+۷. برای رسیدن به طول خاص، متن اضافه و تکراری ننویس.
+
+دقت:
+۱. هیچ آمار، قیمت، مشخصات فنی یا ادعایی ننویس که در پروفایل، بریف یا یادداشت تجربه نیست. هر جا لازم است بنویس [از من بپرس: چه چیزی لازم است].
+۲. اطلاعات عمومی یا فنی که مطمئن نیستی را با [نیاز به بررسی] علامت بزن.
+
+نثر فارسی:
+۱. طبیعی و روان، با لحنی که در پروفایل آمده؛ مثل متخصصی که با مشتری حرف می‌زند.
+۲. جمله‌ی کوتاه و فعل معلوم. هر پاراگراف ۲ تا ۴ خط و یک ایده.
+۳. نیم‌فاصله‌ی درست (می‌شود، محصول‌ها، خانه‌ی).
+۴. ساختار ترجمه‌ای ممنوع؛ مثل «توسط»، «مورد استفاده قرار می‌گیرد» و «در نظر گرفته می‌شود» وقتی شکل ساده‌تری هست.
+۵. این عبارت‌ها و هر چیزی شبیه‌شان ممنوع: «در دنیای امروز»، «امروزه»، «در این مقاله قصد داریم»، «همان‌طور که می‌دانید»، «به طور کلی»، «لازم به ذکر است»، «نقش مهمی ایفا می‌کند»، «یکی از مهم‌ترین»، «بدون شک»، «اهمیت … بر کسی پوشیده نیست»، «در نهایت می‌توان گفت».
+۶. مقدمه‌ی کلی و جمع‌بندی تکراری ننویس.
+
+اگر متن طولانی است، در چند پیام بنویس و آخر هر پیام بنویس «ادامه دارد». من با «ادامه» جلو می‌برم.
+
+خروجی:
+الف. متن کامل با تیترهای Markdown (# برای H1، ## برای H2، ### برای H3)
+ب. سه پیشنهاد Title (حدود ۵۰ تا ۶۰ کاراکتر، کیورد اصلی نزدیک ابتدا، اسم برند در انتها) و سه پیشنهاد Meta Description (حدود ۱۴۰ تا ۱۵۵ کاراکتر، با یک دلیل روشن برای کلیک). طول هر کدام را کنارش بنویس.
+ج. گزارش: تعداد کلمات، جدول | کیورد | کجای متن آمده | و لیست همه‌ی [از من بپرس] و [نیاز به بررسی]ها.</template>
+
+<!-- ============ P5 ============ -->
+<template id="p-edit">متنی که در همین چت نوشتی را مثل یک ویراستار سخت‌گیر بررسی کن. اگر متن را از جای دیگری آورده‌ام، پایین همین پیام است.
+
+قدم ۱: راستی‌آزمایی
+همه‌ی ادعاهای قابل بررسی را پیدا کن: عدد، قیمت، مشخصات، مقایسه، ادعای فنی یا علمی، و هر جمله‌ای که چیزی را قطعی می‌گوید. برای هر کدام یکی از این وضعیت‌ها را بنویس:
+۱. از منبع ما: در پروفایل یا یادداشت تجربه آمده
+۲. دانش عمومی: قابل اتکا و بدون نیاز به منبع
+۳. نیاز به تأیید: باید منبع بیاید یا من تأیید کنم
+۴. احتمالاً غلط: با دلیل
+
+قدم ۲: لحن ماشینی
+جمله‌هایی را پیدا کن که حس متن ماشینی یا ترجمه‌ای می‌دهند: کلیشه، ساختار ترجمه‌ای، مجهول بی‌دلیل، جمله‌ی خیلی بلند، تکرار یک حرف با کلمات دیگر، پاراگراف‌هایی که همه یک‌جور شروع می‌شوند، صفت‌های اغراق‌آمیز، و ادعای کلی بدون مثال.
+برای هر کدام شکل بهتر را پیشنهاد بده.
+
+قدم ۳: ساختار
+۱. هر H2 با جواب مستقیم شروع می‌شود؟
+۲. بخشی هست که بدون بقیه‌ی صفحه قابل فهم نباشد؟
+۳. همه‌ی زیرسؤال‌های بریف جواب گرفته‌اند؟
+۴. بخشی هست که چیزی به کاربر یاد نمی‌دهد و می‌شود حذفش کرد؟
+
+قدم ۴: نگارش
+نیم‌فاصله، «ی» و «ک» عربی، علائم نگارشی و یکدستی املای کلمه‌ها.
+
+قوانین:
+۱. ساختار، تیترها، کیوردها و یادداشت‌های تجربه را عوض نکن، مگر اینکه مشکلی دیده باشی و آن را جدا گفته باشی.
+۲. چیزی به متن اضافه نکن که منبعش در همین چت نیست.
+
+خروجی:
+الف. جدول ادعاها: | ادعا | وضعیت | کار لازم |
+ب. جدول اصلاحات: | متن فعلی | متن پیشنهادی | دلیل |
+ج. جواب سؤال‌های قدم ۳
+د. متن کامل اصلاح‌شده، با همان تیترهای Markdown
+
+متن:
+[اگر متن در همین چت نوشته نشده، متن کامل را اینجا بگذار؛ وگرنه این خط را پاک کن]</template>
+
+<!-- ============ P6 ============ -->
+<template id="p-check">صفحه‌ای که منتشر کرده‌ایم یا آماده‌ی انتشار است را با چک‌لیست انتشار بررسی کن.
+
+منبع:
+۱. اگر کد HTML صفحه را پیوست کرده‌ام، فقط از همان استفاده کن.
+۲. اگر نه، صفحه را از روی آدرس باز کن. اگر باز نشد، بگو و حدس نزن.
+۳. کیوردها، زیرسؤال‌ها و لینک‌ها را از بریف همین چت بگیر. اگر بریف در این چت نیست، کیورد اصلی را از Title، H1 و URL دربیاور و بالای خروجی بنویس از کجا برداشتی.
+
+برای هر آیتم یکی از این سه را بنویس: «درست»، «نادرست» یا «دستی» (یعنی از روی کد قابل بررسی نیست).
+
+کیورد و ساختار:
+۱. کیورد اصلی در URL، و URL کوتاه، انگلیسی و با حروف کوچک
+۲. کیورد اصلی در Title
+۳. فقط یک H1 که کیورد اصلی را دارد
+۴. کیورد اصلی در پاراگراف اول
+۵. کیوردهای مرتبط در H2ها و متن، بدون تکرار زورکی
+۶. هر H2 با جواب مستقیم شروع می‌شود
+
+متا و ایندکس:
+۷. Title وجود دارد و حدود ۵۰ تا ۶۰ کاراکتر است
+۸. Meta Description وجود دارد و حدود ۱۴۰ تا ۱۵۵ کاراکتر است
+۹. Canonical وجود دارد و به خود صفحه اشاره می‌کند
+۱۰. صفحه noindex نیست
+
+محتوا:
+۱۱. همه‌ی زیرسؤال‌های بریف جواب گرفته‌اند
+۱۲. بیشتر پاراگراف‌ها ۴ خط یا کوتاه‌ترند
+۱۳. مقاله‌ی بلند فهرست مطالب دارد
+۱۴. جایی که مقایسه یا مشخصات هست، جدول آمده
+۱۵. FAQ دارد
+۱۶. مقاله اسم نویسنده و تاریخ انتشار یا به‌روزرسانی دارد
+۱۷. هیچ [از من بپرس] یا [نیاز به بررسی] در متن نمانده
+
+لینک:
+۱۸. لینک‌های داخلی بریف در متن هستند
+۱۹. Anchorها توصیفی‌اند، نه «اینجا کلیک کنید»
+۲۰. هر جا ادعایی منبع لازم دارد، لینک خارجی به منبع معتبر آمده
+۲۱. لینک‌های خارجی در تب جدید باز می‌شوند
+
+تصویر:
+۲۲. همه‌ی عکس‌ها Alt توصیفی دارند
+۲۳. عکس‌ها width و height دارند
+۲۴. عکس اصلی بالای صفحه lazy load نشده
+۲۵. فرمت WebP یا AVIF و حجم سبک
+
+Schema:
+۲۶. مقاله: Article با author و تاریخ. محصول: Product با Offer. همه‌ی صفحه‌ها: BreadcrumbList
+۲۷. Schema با محتوای صفحه تناقض ندارد (قیمت، امتیاز، نویسنده)
+۲۸. اگر FAQPage هست، همان سؤال‌ها در متن صفحه هم دیده می‌شوند. توجه: گوگل نتیجه‌ی ویژه‌ی FAQ را برای بیشتر سایت‌ها دیگر نشان نمی‌دهد و این Schema اختیاری است.
+
+دستی:
+۲۹. نمایش درست در موبایل
+۳۰. کیفیت و واقعی بودن عکس‌ها
+۳۱. صفحه‌ی دیگری از سایت سر همین کیورد رقابت نمی‌کند (کنیبالیزیشن)
+۳۲. از صفحه‌های قدیمی و مرتبط سایت به این صفحه لینک داده شده
+
+قوانین:
+۱. هر چیزی که قابل شمارش است (طول Title و Description، تعداد H1، عکس‌های بدون Alt) را اگر می‌توانی با کد بشمار.
+۲. فقط از روی کد و متن صفحه قضاوت کن.
+
+خروجی:
+الف. جدول: | شماره | آیتم | وضعیت | توضیح |
+ب. لیست اصلاحات به ترتیب اهمیت: اول چیزهایی که جلوی ایندکس را می‌گیرند، بعد کیورد و متا، بعد بقیه. برای هر کدام دقیقاً بنویس چه چیزی باید عوض شود.
+ج. وضعیت کلی: «آماده» یا «نیاز به اصلاح»
+
+آدرس صفحه:
+[آدرس صفحه را اینجا بنویس، یا کد HTML صفحه را پیوست کن]</template>
+
+<script>
+const STEPS = [
+  {id:"guide", code:"شروع", group:"راهنما", title:"این سیستم چطور کار می‌کنه؟", guide:true},
+  {id:"profile", code:"S0", group:"آماده‌سازی", title:"پروفایل کسب‌وکار",
+   desc:"اول چت این رو می‌فرستی تا AI بدونه برای کی می‌نویسه و چه قانون‌هایی داره. یه بار پرش کن و برای همه‌ی صفحه‌ها ازش استفاده کن.",
+   need:"اطلاعات کسب‌وکارت، یه بار برای همیشه", out:"خلاصه‌ی پروفایل و لیست جاهای خالی",
+   tip:"<b>نکته:</b> بند ۹ مهم‌ترین بخش پروفایله. هر چی اینجا دقیق‌تر بنویسی، متن نهایی کمتر شبیه متن‌های تکراری اینترنت می‌شه."},
+  {id:"competitor", code:"P1", group:"تحقیق", title:"آنالیز رقبا",
+   desc:"صفحه‌های رقبای صفحه‌ی اول گوگل رو می‌خونه و درمیاره کاربر واقعاً چی می‌خواد، رقبا کجا کم گذاشتن و تو چی داری که اونا ندارن.",
+   need:"موضوع و کیورد صفحه، ۳ تا ۵ آدرس رقیب", out:"جدول رقبا، جای خالی‌ها و فرصت‌های Information Gain",
+   tip:"<b>اگه AI نتونست صفحه‌ای رو باز کنه:</b> صفحه رو توی مرورگر باز کن، متنش رو کپی کن و توی همین چت بفرست."},
+  {id:"brief", code:"P2", group:"تحقیق", title:"بریف محتوا",
+   desc:"سؤال اصلی کاربر رو به زیرسؤال‌ها می‌شکنه و ساختار کامل صفحه رو بر اساس نوعش (مقاله، دسته، محصول یا لندینگ) با کیورد، لینک داخلی و جای تجربه‌ی واقعی می‌چینه.",
+   need:"خروجی P1 در همین چت", out:"بریف کامل نویسنده"},
+  {id:"interview", code:"P3", group:"نوشتن", title:"مصاحبه‌ی تجربه", isNew:true,
+   desc:"قبل از نوشتن، AI ازت سؤال‌های مشخص می‌پرسه تا تجربه و داده‌ی واقعی خودت وارد متن بشه. این همون مرحله‌ایه که بیشتر آدم‌ها جا می‌ندازن.",
+   need:"بریف P2 در همین چت، و ده دقیقه وقت خودت", out:"یادداشت تجربه و جای هر یادداشت در صفحه",
+   tip:"<b>نکته:</b> جواب‌هات رو کوتاه ولی مشخص بنویس. «مشتری‌ها معمولاً سایز رو اشتباه انتخاب می‌کنن، چون…» خیلی بهتر از «مشتری‌ها راضی‌ان» کار می‌کنه."},
+  {id:"write", code:"P4", group:"نوشتن", title:"نوشتن متن",
+   desc:"متن کامل رو دقیقاً از روی بریف و یادداشت تجربه می‌نویسه، با قانون‌های نثر فارسی، و هر جا اطلاعات واقعی لازمه جاش رو خالی می‌ذاره که خودت پر کنی.",
+   need:"بریف و یادداشت تجربه در همین چت", out:"متن کامل، Title و Description، گزارش کیوردها"},
+  {id:"edit", code:"P5", group:"کنترل کیفیت", title:"ویرایش و راستی‌آزمایی", isNew:true,
+   desc:"متن رو مثل یه ویراستار سخت‌گیر می‌خونه: ادعاهای بی‌منبع، جمله‌های ماشینی و ترجمه‌ای، بخش‌های بی‌فایده و غلط‌های نگارشی رو پیدا و اصلاح می‌کنه.",
+   need:"متن P4 در همین چت، یا متن آماده‌ی خودت", out:"جدول ادعاها، جدول اصلاحات و متن نهایی"},
+  {id:"check", code:"P6", group:"کنترل کیفیت", title:"چک‌لیست انتشار",
+   desc:"صفحه رو قبل یا بعد از انتشار با ۳۲ آیتم می‌سنجه و لیست اصلاحات رو به ترتیب اهمیت می‌ده.",
+   need:"آدرس صفحه یا کد HTML صفحه", out:"جدول چک‌لیست و لیست اصلاحات",
+   tip:"<b>گرفتن کد HTML:</b> روی کامپیوتر صفحه رو باز کن، Ctrl+U رو بزن، همه رو کپی کن و توی یه فایل txt ذخیره کن و به چت بده."}
+];
+
+const tabsEl = document.getElementById("tabs"), view = document.getElementById("view");
+const prompts = STEPS.filter(s => !s.guide);
+let current = "guide";
+
+function promptText(id){ return document.getElementById("p-" + id).content.textContent; }
+function esc(s){ return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function fmt(t){
+  return esc(t)
+    .replace(/^((?:الف|ب|ج|د|ه|و|ز)\. .+)$/gm,'<b class="hl">$1</b>')
+    .replace(/^(قدم [۰-۹]+: .+)$/gm,'<b class="hl">$1</b>')
+    .replace(/^([^\n۰-۹:]{2,40}:)$/gm,'<b class="hl">$1</b>')
+    .replace(/(\[[^\]\n]*اینجا[^\]\n]*\])/g,'<span class="ph">$1</span>');
+}
+
+function renderTabs(){
+  let html = "", last = null;
+  STEPS.forEach(s => {
+    if (s.group !== last){ html += `<div class="grp">${s.group}</div>`; last = s.group; }
+    html += `<button class="tab${s.id===current?" active":""}" data-id="${s.id}"><span class="code">${s.code}</span><span class="tt">${s.title}${s.isNew?'<span class="new">جدید</span>':""}</span></button>`;
+  });
+  tabsEl.innerHTML = html;
+  tabsEl.querySelectorAll(".tab").forEach(b => b.onclick = () => show(b.dataset.id));
+  const a = tabsEl.querySelector(".active"); if (a && a.scrollIntoView) a.scrollIntoView({block:"nearest",inline:"center"});
+}
+
+function show(id){
+  current = id;
+  const s = STEPS.find(x => x.id === id);
+  const i = STEPS.indexOf(s), nx = STEPS[i+1];
+  const nextBtn = nx ? `<button class="next" data-id="${nx.id}">مرحله‌ی بعد: ${nx.code} ${nx.title} ←</button>` : "";
+  if (s.guide){
+    view.innerHTML = `<div class="phead"><h2>${s.title}</h2></div>` + document.getElementById("g-guide").innerHTML + `<div style="margin-top:22px">${nextBtn}</div>`;
+    document.getElementById("flow").innerHTML = prompts.map(p => `<div class="st" data-id="${p.id}"><span class="n">${p.code}</span><div><b>${p.title}${p.isNew?' <span class="new" style="font-size:11px;background:var(--green);color:#fff;border-radius:6px;padding:0 6px">جدید</span>':""}</b><span>${p.desc}</span></div></div>`).join("");
+    view.querySelectorAll(".st").forEach(e => e.onclick = () => show(e.dataset.id));
+  } else {
+    const txt = promptText(id);
+    view.innerHTML = `
+      <div class="phead"><span class="code">${s.code}</span><h2>${s.title}</h2></div>
+      <p class="desc">${s.desc}</p>
+      <div class="io"><div><b>چی لازم داری</b>${s.need}</div><div><b>چی تحویل می‌گیری</b>${s.out}</div></div>
+      ${s.tip ? `<div class="tip">${s.tip}</div>` : ""}
+      <div class="box">
+        <div class="boxbar"><span class="lbl">پرامپت</span><button class="copy" id="cp">کپی پرامپت</button></div>
+        <div class="ptext">${fmt(txt)}</div>
+      </div>
+      ${nextBtn}
+      <footer>سیستم پرامپت تولید محتوای سایت · عماد چابک · <a href="https://dmroom.academy/" target="_blank" rel="noopener">آکادمی دی ام روم</a></footer>`;
+    document.getElementById("cp").onclick = e => copy(txt, e.currentTarget);
+  }
+  const nb = view.querySelector(".next"); if (nb) nb.onclick = () => show(nb.dataset.id);
+  renderTabs();
+  try { history.replaceState(null, "", "#" + id); } catch(e){}
+  window.scrollTo({top:0});
+}
+
+function copy(t, btn){
+  const ok = () => { btn.classList.add("done"); btn.textContent = "کپی شد ✓"; toast(); setTimeout(() => { btn.classList.remove("done"); btn.textContent = "کپی پرامپت"; }, 1800); };
+  if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(t).then(ok, () => fallback(t, ok));
+  else fallback(t, ok);
+}
+function fallback(t, ok){
+  const a = document.createElement("textarea"); a.value = t; a.setAttribute("readonly",""); a.style.position = "fixed"; a.style.opacity = "0";
+  document.body.appendChild(a); a.select(); a.setSelectionRange(0, t.length);
+  try { document.execCommand("copy"); ok(); } catch(e){} a.remove();
+}
+function toast(){ const el = document.getElementById("toast"); el.classList.add("show"); setTimeout(() => el.classList.remove("show"), 1500); }
+
+const h = location.hash.slice(1);
+show(STEPS.some(s => s.id === h) ? h : "guide");
+</script>
+</body>
+</html>
